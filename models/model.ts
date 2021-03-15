@@ -1,5 +1,5 @@
 import { Model, Schema, model } from "mongoose";
-import { IUsers } from "../typings/List";
+import { IUsers } from "../typings";
 
 const UsersSchema: Schema = new Schema(
   { uname: String, psw: String },

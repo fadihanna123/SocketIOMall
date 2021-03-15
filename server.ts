@@ -1,8 +1,8 @@
 // Import packages
 import { Server, Socket } from "socket.io";
 
-import { Users } from "./models/model";
-import "./config/database";
+import { Users } from "./models";
+import "./config";
 
 // Set up Server
 const io = new Server(2323, { cors: { origin: "http://localhost:3000" } });
