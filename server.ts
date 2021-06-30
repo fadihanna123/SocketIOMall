@@ -7,6 +7,44 @@ import "./config";
 // Set up Server
 const io = new Server(2323, { cors: { origin: "http://localhost:3000" } });
 
+import { Server } from "socket.io";
+import { User } from "../typings";
+
+const io = new Server(5000, { cors: { origin: "http://localhost:3000" } });
+
+const users: Record<string, User> = {};
+
+io.on("connection", (socket) => {
+  users[socket.id] = {
+    id: socket.id,
+    joined: new Date(),
+  };
+
+  socket.on("set nickname", (nickname) => {
+    if (users[socket.id].nickname) {
+      return socket.emit("message", {
+        type: "danger",
+        text: "You already have nickname you fool!",
+      });
+    }
+
+    users[socket.id] = {
+      ...users[socket.id],
+      nickname,
+    };
+
+    console.log(users[socket.id]);
+
+    socket.emit("nickname set", users[socket.id]);
+  });
+
+  socket.on("disconnect", () => {
+    delete users[socket.id];
+    socket.emit("nickname set", users[socket.id]);
+  });
+});
+
+
 // Socket
 io.on("connection", (socket: Socket) => {
   console.log(`✅ Client ${socket.id} has connected!`);
