@@ -7,13 +7,8 @@ import "./config";
 // Set up Server
 const io = new Server(2323, { cors: { origin: "http://localhost:3000" } });
 
-import { Server } from "socket.io";
-import { User } from "../typings";
-
-const io = new Server(5000, { cors: { origin: "http://localhost:3000" } });
-
+/* Example 2
 const users: Record<string, User> = {};
-
 io.on("connection", (socket) => {
   users[socket.id] = {
     id: socket.id,
@@ -24,7 +19,7 @@ io.on("connection", (socket) => {
     if (users[socket.id].nickname) {
       return socket.emit("message", {
         type: "danger",
-        text: "You already have nickname you fool!",
+        text: "You already have nickname you!",
       });
     }
 
@@ -43,7 +38,7 @@ io.on("connection", (socket) => {
     socket.emit("nickname set", users[socket.id]);
   });
 });
-
+*/
 
 // Socket
 io.on("connection", (socket: Socket) => {
