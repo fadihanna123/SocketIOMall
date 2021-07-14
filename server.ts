@@ -3,6 +3,7 @@ import { Server, Socket } from "socket.io";
 
 import { Users } from "./models";
 import "./config";
+import { disconnect } from "./actions";
 
 // Set up Server
 const io = new Server(2323, { cors: { origin: "http://localhost:3000" } });
@@ -41,16 +42,11 @@ io.on("connection", (socket) => {
 */
 
 // Socket
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket: Socket): void => {
   console.log(`✅ Client ${socket.id} has connected!`);
 
-  // Disconnect
-  socket.on("disconnect", () => {
-    console.log(`🚫 Client ${socket.id} has disconnected`);
-  });
-
   // Recieve
-  socket.on("test message", async (data: []) => {
+  socket.on("test message", async (data: []): Promise<void> => {
     console.log("📩 Message from client", data);
 
     // Send back message to client
@@ -58,9 +54,12 @@ io.on("connection", (socket: Socket) => {
   });
 
   // Send
-  socket.on("send message", async (msg: string) => {
+  socket.on("send message", (msg: string): void => {
     console.log("📩 Message from client", msg);
 
     socket.emit("test message", msg);
   });
+
+  // Disconnect
+  socket.on("disconnect", (): void => disconnect(socket));
 });
